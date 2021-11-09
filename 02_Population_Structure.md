@@ -92,6 +92,45 @@ rm wheat-blast.snps.filtered.as_diploid.* # Remove intermediate files
 Next, using *VCFtools* we computed pairwise SNP correlations as *r<sup>2</sup>*, as well as Lewontin's *D* and *D'*
 ```bash
 # Clusters of isolates were grouped in files named as "cluster_X.list"
-vcftools --keep cluster_X.list --gzvcf wheat-blast.snps.filtered.as_dip_phased.vcf.gz --max-alleles 2 --min-alleles 2 --min-r2 0.1 --hap-r2 --phased --stdout | gzip > $i_cluster.LD.r2.gz
+vcftools --keep cluster_X.list --gzvcf wheat-blast.snps.filtered.as_dip_phased.vcf.gz --max-alleles 2 --min-alleles 2 --min-r2 0.1 --hap-r2 --phased --stdout | gzip > cluster_X.LD.gz
 ```
 
+Finally, using *R* we calculated the average of each LD measure per bins of physical distance in the genome
+```R
+#R
+
+bin_size <- 1000 # We used a bin size of 1000. Smaller sizes will result in a higher number of measures
+
+# Load the dataset and transform the LD measures for their absolute values
+cl <- read.table('cluster_X.LD.gz', header = True)
+cl$R.2 <- abs(cl$R.2)
+cl$D <- abs(cl$D)
+cl$Dprime <- abs(cl$Dprime)
+
+# Restrict to distaces <= 2Mb
+distances <- cl$POS2 - cl$POS1
+cl <- cbind(cl, distances)
+cl <- cl[(cl$distances <= 2000000), ]
+
+# Create bins and empty vectors for final results
+bins <- seq(1, max(cl$distances), bin_size)
+r2_out <- c()
+D_out <- c()
+Dprime_out <- c()
+
+# Iterate through bins and compute mean values for each of the LD measures
+for(bin in bins){
+    r2_mval <- mean(cl[(cl$distances >= bin) & (cl$distances < bin + bin_size), 5])
+    r2_out <- c(r2_out, r2_mval)
+    D_mval <- mean(cl[(cl$distances >= bin) & (cl$distances < bin + bin_size), 6])
+    D_out <- c(D_out, D_mval)
+    Dprime_mval <- mean(cl[(cl$distances >= bin) & (cl$distances < bin + bin_size), 7])
+    Dprime_out <- c(Dprime_out, Dprime_mval)
+}
+
+# Generate plots
+par(mfrow=c(1,3))
+plot(bins, r2_out, main = 'r^2')
+plot(bins, D_out, main = 'r^2')
+plot(bins, Dprime_out, main = 'r^2')
+```
