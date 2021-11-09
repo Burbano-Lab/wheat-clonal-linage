@@ -1,5 +1,5 @@
 # XX General Title XX
-# 3. Detecting recombination via Linkage Desequilibrium (LD) patterns
+# 3. Recombination Analyses
 
 Program                | Location
 ---------------------- | -----------
@@ -13,7 +13,7 @@ Program                | Location
 *bcftools v.1.11*      | (https://github.com/samtools/bcftools)
 
 
-
+### Detecting recombination via Linkage Desequilibrium (LD) patterns
 To detect and measure the presence of recombination, we grouped the dataset based on the previously described PCA. We will use *VCFtools* to compute several measures for recombination. However, as *VCFtools* handles diploid organisms, we transformed the haploid *VCF* into "phased double haploid" *VCFs*
 ```bash
 plink --allow-extra-chr --vcf wheat-blast.snps.filtered.vcf.gz --recode vcf --out wheat-blast.snps.filtered.as_diploid # Create a VCF as diplod
@@ -136,12 +136,14 @@ Additionally, we used the presence of four gametes as a proxy for recombination 
 For this purpose, we used *RminCutter*. As this program takes alignments as input, we prepared the data using a combination of *samtools* and *bcftools*.
 
 ```bash
-# The following snippet iterates throught 8 chromosomes of the 70-15 reference genome. Inside each loop, a new iteration over isolates of a cluster in a file 'cluster_N.list' is performed. Within each loop, all the variants from each isolate are applied to the reference genome and the outputs are pseudo-fasta files per chromosome
+# The following snippet iterates throught 8 chromosomes of the 70-15 reference genome. 
+# Inside each loop, a new iteration over isolates of a cluster in a file 'cluster_N.list' is performed. 
+# Within each sub-loop, all the variants from each isolate are applied to the reference genome and the outputs are pseudo-fasta files per chromosome
 
 for chr in {1..8}; do
     (while read sample; do
         samtools faidx 70-15.fasta $chr: | bcftools consensus -s $sample -p $sample\_ wheat-blast.snps.filtered.vcf.gz | tr "\n" " " | sed 's/ //g' | sed 's/$/\n/g' | sed 's/\:/\:\n/g' >> cluster_N.CHR$chr.fasta
-        done < cluster_N.list
+        done < cluster_N.list )
 done
 ```
 
