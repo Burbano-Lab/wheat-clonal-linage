@@ -1,4 +1,4 @@
-# General Title
+# XX General Title XX
 # 2. Population Structure Analyses
 
 Program                  | Location
@@ -8,10 +8,9 @@ Program                  | Location
 *samtools v.1.11*        | (https://github.com/samtools/samtools)
 *sambamba v0.8.0*        | (https://github.com/biod/sambamba)
 *GATK v4.2*              | (https://github.com/broadinstitute/gatk/releases)
-
 *PLINK v.1.9*            | ()
-*R*
-
+*R*                      | ()
+*VCFtools v.0.1.16*      | ()
 
 ## Alignment of short reads to reference genome
 
@@ -53,6 +52,7 @@ bcfools view -H wheat-blast.raw.snps.vcf.gz | cut -f8 | awk -F "QD=" '{print $2}
 
 We assesed the distribution of the Quality by Depth, to set a filters of one standard deviation around the median value
 ```python
+# Python
 import pandas as pd
 QD = pd.read_csv('wheat-blast.raw.snps.QD.gz', header = None, compression = 'gzip')
 med = QD.median()
@@ -61,20 +61,37 @@ upper = med + QD.std()
 print(lower, upper)
 ```
 
-Finally, we filtered accordingly using *GATK VariantFiltration*
+Finally, we filtered accordingly using *GATK VariantFiltration* and created a new VCF keeping non-missing positions using *bcftools*
 ```bash
 gatk VariantFiltration --filter-name "QD" --filter-expression "QD <= $lower || QD >= $upper" -V wheat-blast.raw.snps.QD.gz -O wheat-blast.snps.filter.vcf.gz
+bcftools view -g ^miss wheat-blast.snps.filter.vcf.gz | bgzip > wheat-blast.snps.filtered.vcf.gz
 ```
 
 ## PCA analyses
 We computed pairwise Hamming distances on non-missing SNP positions.
 ```bash
-plink --allow-extra-chr --geno 0 --vcf wheat-blast.snps.filter.vcf.gz --out wheat-blast.snps.filtered
+plink --allow-extra-chr --vcf wheat-blast.snps.filtered.vcf.gz --out wheat-blast.snps.filtered
 ```
 
 And performed a PCA using *R*
 ```R
+# R
 m <- read.table('wheat-blast.snps.filtered.dist', header = False)
 npca <- prcomp(m, scale.=True)
 plot(npca$x[,1], npca$x[,2])
 ```
+
+## Detecting recombination
+To detect and measure the presence of recombination, we grouped the dataset based on the previously described PCA. We will use *VCFtools* to compute several measures for recombination. However, as *VCFtools* handles diploid organisms, we transformed the haploid *VCF* into "phased double haploid" *VCFs*
+```bash
+plink --allow-extra-chr --vcf wheat-blast.snps.filtered.vcf.gz --recode vcf --out wheat-blast.snps.filtered.as_diploid # Create a VCF as diplod
+sed 's/\//\|/g' wheat-blast.snps.filtered.as_dip.vcf | bgzip > wheat-blast.snps.filtered.as_dip_phased.vcf.gz # Artificially phase the VCF file
+rm wheat-blast.snps.filtered.as_diploid.* # Remove intermediate files
+```
+
+Next, using *VCFtools* we computed pairwise SNP correlations as *r<sup>2</sup>*, as well as Lewontin's *D* and *D'*
+```bash
+# Clusters of isolates were grouped in files named as "cluster_X.list"
+vcftools --keep cluster_X.list --gzvcf wheat-blast.snps.filtered.as_dip_phased.vcf.gz --max-alleles 2 --min-alleles 2 --min-r2 0.1 --hap-r2 --phased --stdout | gzip > $i_cluster.LD.r2.gz
+```
+
