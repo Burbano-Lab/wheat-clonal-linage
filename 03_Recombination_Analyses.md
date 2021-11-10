@@ -149,7 +149,7 @@ done
 
 With the formatted pseudo-fasta files, we proceeded to run *RminCutter*
 ```bash
-# The following loop will run RminCutter on a given cluster os samples per chromosome
+# The following loop will run RminCutter on a given cluster of samples per chromosome
 for chr in {1..8}; do
     perl RminCutter.pl -g -i $cluster.Chr$chr.fasta
 done

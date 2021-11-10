@@ -37,4 +37,18 @@ As low bootstrap values can be caused due to presence homoplasies, we used *Clon
 ```bash
 ClonalFrameML B71clust_PY0925clust.snps.filtered.fullinfo.fasta.raxml.bestTree B71clust_PY0925clust.snps.filtered.fullinfo.fasta
 ```
+We used the output of *ClonalFrameML* as input for the dating analyses (see Dating the Phylogeny).  
+
+Furthermore, in order to test the effect of removing all targeted regions with homoplasies on the ML phylogenetic reconstruction, we used the output file *_prefix_.importation_status.txt* to remove all the regions from the original concatenated-SNPs alignment. For this purpose we used the custom *Python* scripts *get_list_of_SNPs_with_homoplasy.py* and *clean_fasta.py*
+```bash
+python clean_homoplasy_from_fasta.py B71clust_PY0925clust.snps.filtered.fullinfo.fasta.importation_status.txt B71clust_PY0925clust.snps.filtered.fullinfo.fasta > B71clust_PY0925clust.snps.filtered.fullinfo.clean.fasta 2> B71clust_PY0925clust.snps.filtered.fullinfo.homoplasy.fasta
+```
+
+Finally, we used the cleaned fasta alignment and computed again a ML phylogeny with RAxML-NG
+```bash
+raxml-ng --all --msa B71clust_PY0925clust.snps.filtered.fullinfo.clean.fasta --data-type DNA --model GTR+G --bs-trees 1000
+```
+Note: Bootstrap values in the main nodes improved
+
+## Dating the phylogeny
 
