@@ -87,7 +87,7 @@ legend('topleft', paste("Pearson\'s r =", round(cor(m$Coll_Year, m$Patr_dist_to_
 abline(lm(m$Distance ~ m$Date), lty = 2)
 cor.test(m$Coll_Year, m$Patr_dist_to_PY0925)
 ```
-[!Distances vs Dates](/data/04_Phylogeny/Dist_vs_Dates.png)
+![Distances vs Dates](/data/04_Phylogeny/Dist_vs_Dates.png)
 
 
 
