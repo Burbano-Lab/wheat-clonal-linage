@@ -37,7 +37,7 @@ gzip > cluster_X.LD.gz
 ```
 
 Finally, using *R* we calculated the average of each LD measure per bins of physical distance in the genome
-```R
+```{r}
 #R
 bin_size <- 1000 # We used a bin size of 1000. Smaller sizes will result in a higher number of measures
 
