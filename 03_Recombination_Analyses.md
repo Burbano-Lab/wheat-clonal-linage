@@ -16,15 +16,24 @@ Program                | Location
 ### Detecting recombination via Linkage Desequilibrium (LD) patterns
 To detect and measure the presence of recombination, we grouped the dataset based on the previously described PCA. We will use *VCFtools* to compute several measures for recombination. However, as *VCFtools* handles diploid organisms, we transformed the haploid *VCF* into "phased double haploid" *VCFs*
 ```bash
-plink --allow-extra-chr --vcf wheat-blast.snps.filtered.vcf.gz --recode vcf --out wheat-blast.snps.filtered.as_diploid # Create a VCF as diplod
-sed 's/\//\|/g' wheat-blast.snps.filtered.as_dip.vcf | bgzip > wheat-blast.snps.filtered.as_dip_phased.vcf.gz # Artificially phase the VCF file
-rm wheat-blast.snps.filtered.as_diploid.* # Remove intermediate files
+# Create a VCF as diplod
+plink --allow-extra-chr --vcf wheat-blast.snps.filtered.vcf.gz --recode vcf \
+--out wheat-blast.snps.filtered.as_diploid
+
+# Artificially phase the VCF file
+sed 's/\//\|/g' wheat-blast.snps.filtered.as_dip.vcf |
+bgzip > wheat-blast.snps.filtered.as_dip_phased.vcf.gz
+
+# Remove intermediate files
+rm wheat-blast.snps.filtered.as_diploid.*
 ```
 
 Next, using *VCFtools* we computed pairwise SNP correlations as *r<sup>2</sup>*, as well as Lewontin's *D* and *D'*
 ```bash
 # Clusters of isolates were grouped in files named as "cluster_X.list"
-vcftools --keep cluster_X.list --gzvcf wheat-blast.snps.filtered.as_dip_phased.vcf.gz --max-alleles 2 --min-alleles 2 --min-r2 0.1 --hap-r2 --phased --stdout | gzip > cluster_X.LD.gz
+vcftools --keep cluster_X.list --gzvcf wheat-blast.snps.filtered.as_dip_phased.vcf.gz \
+--max-alleles 2 --min-alleles 2 --min-r2 0.1 --hap-r2 --phased --stdout |
+gzip > cluster_X.LD.gz
 ```
 
 Finally, using *R* we calculated the average of each LD measure per bins of physical distance in the genome
@@ -136,13 +145,19 @@ Additionally, we used the presence of four gametes as a proxy for recombination 
 For this purpose, we used *RminCutter*. As this program takes alignments as input, we prepared the data using a combination of *samtools* and *bcftools*.
 
 ```bash
-# The following snippet iterates throught 8 chromosomes of the 70-15 reference genome. 
-# Inside each loop, a new iteration over isolates of a cluster in a file 'cluster_N.list' is performed. 
-# Within each sub-loop, all the variants from each isolate are applied to the reference genome and the outputs are pseudo-fasta files per chromosome
+'''
+The following snippet iterates throught 8 chromosomes of the 70-15 reference genome. 
+Inside each loop, a new iteration over isolates of a cluster in a file 'cluster_N.list' is performed. 
+Within each sub-loop, all the variants from each isolate are applied to the reference genome
+and the outputs are pseudo-fasta files per chromosome
+'''
 
 for chr in {1..8}; do
     (while read sample; do
-        samtools faidx 70-15.fasta $chr: | bcftools consensus -s $sample -p $sample\_ wheat-blast.snps.filtered.vcf.gz | tr "\n" " " | sed 's/ //g' | sed 's/$/\n/g' | sed 's/\:/\:\n/g' >> cluster_N.CHR$chr.fasta
+        samtools faidx 70-15.fasta $chr: |
+	bcftools consensus -s $sample -p $sample\_ wheat-blast.snps.filtered.vcf.gz |
+	tr "\n" " " | sed 's/ //g' | sed 's/$/\n/g' |
+	sed 's/\:/\:\n/g' >> cluster_N.CHR$chr.fasta
         done < cluster_N.list )
 done
 ```

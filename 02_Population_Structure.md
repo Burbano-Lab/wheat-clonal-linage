@@ -47,7 +47,8 @@ gatk SelectVariants -select-type SNP -V wheat-blast.raw.vcf.gz -O wheat-blast.ra
 
 We extracted all Quality by Depth values
 ```bash
-bcfools view -H wheat-blast.raw.snps.vcf.gz | cut -f8 | awk -F "QD=" '{print $2}' | cut -f1 -d ";" | gzip >  wheat-blast.raw.snps.QD.gz
+bcfools view -H wheat-blast.raw.snps.vcf.gz | cut -f8 |
+awk -F "QD=" '{print $2}' | cut -f1 -d ";" | gzip >  wheat-blast.raw.snps.QD.gz
 ```
 
 We assesed the distribution of the Quality by Depth, to set a filters of one standard deviation around the median value
@@ -63,7 +64,11 @@ print(lower, upper)
 
 Finally, we filtered accordingly using *GATK VariantFiltration* and created a new VCF keeping non-missing positions using *bcftools*
 ```bash
-gatk VariantFiltration --filter-name "QD" --filter-expression "QD <= $lower || QD >= $upper" -V wheat-blast.raw.snps.QD.gz -O wheat-blast.snps.filter.vcf.gz
+gatk VariantFiltration --filter-name "QD" \
+--filter-expression "QD <= $lower || QD >= $upper" \
+-V wheat-blast.raw.snps.QD.gz \
+-O wheat-blast.snps.filter.vcf.gz
+
 bcftools view -g ^miss wheat-blast.snps.filter.vcf.gz | bgzip > wheat-blast.snps.filtered.vcf.gz
 ```
 
