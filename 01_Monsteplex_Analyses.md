@@ -1,7 +1,7 @@
 # General Title
 # 1. Monsterplex analyses
 
-An impotant source of genetic information come from rapid screening analyses on the fileds, from which few SNPs can be easily assessed with the Monsterplex methodology.
+TEST An impotant source of genetic information come from rapid screening analyses on the fileds, from which few SNPs can be easily assessed with the Monsterplex methodology.
 
 To show how few SNP positions (N = 84) can discriminate the most important infecting lineages in *Pyricularia oryzae*, we gathered whole genomic information from 576 samples and reconstructed a quick phylogenetic analyses based only on those 84 positions.
 
