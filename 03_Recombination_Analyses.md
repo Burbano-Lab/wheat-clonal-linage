@@ -140,7 +140,7 @@ plt.xlabel('Distance between loci')
 plt.ylabel('LD')
 plt.show()
 ```
-![LD simulation example](/data/03_Recombination/LD_simulation_example.png)
+![LD simulation example](/data/03_Recombination/LD_simulation_example.png)  
 A dedicated *Python* script can be found in the file [LD_simulations.py](/scripts/03_Recombination/LD_simulations.py)
 
 ## Measuring recombination as number of violations of the four-gamete test
