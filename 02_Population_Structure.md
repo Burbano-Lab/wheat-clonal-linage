@@ -78,11 +78,11 @@ We computed pairwise Hamming distances on non-missing SNP positions.
 plink --allow-extra-chr --vcf wheat-blast.snps.filtered.vcf.gz --out wheat-blast.snps.filtered
 ```
 
-And performed a PCA using *R*
+The resulting files ([wheat-blast.snps.filtered.dist](/data/02_Population_Structure/wheat-blast.snps.filtered.dist) ; [wheat-blast.snps.filtered.dist.id](/data/02_Population_Structure/wheat-blast.snps.filtered.dist.id)) were used as input to performed a PCA using *R*
 ```R
 # R
-m <- read.table('wheat-blast.snps.filtered.dist', header = False)
-npca <- prcomp(m, scale.=True)
-plot(npca$x[,1], npca$x[,2])
+m <- read.table('wheat-blast.snps.filtered.dist', header = FALSE)
+npca <- prcomp(m, scale. = TRUE)
+plot(npca$x[,1], npca$x[,2], xlab = 'PC1', ylab = 'PC2')
 ```
-
+![Wheat blast PCA](/data/02_Population_Structure/Wheat_blast_PCA.png)

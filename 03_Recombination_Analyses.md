@@ -35,14 +35,14 @@ vcftools --keep cluster_X.list --gzvcf wheat-blast.snps.filtered.as_dip_phased.v
 --max-alleles 2 --min-alleles 2 --min-r2 0.1 --hap-r2 --phased --stdout |
 gzip > cluster_X.LD.gz
 ```
-
-Finally, using *R* we calculated the average of each LD measure per bins of physical distance in the genome
+Resulting files: [B71 cluster](/data/03_Recombination/B71_cluster.LD.gz) ; [PY0925 cluster](/data/03_Recombination/PY0925_cluster.LD.gz) ; [Brazilian samples](/data/03_Recombination/Brazilian_cluster.thinned.LD.gz).  
+Finally, using *R* we calculated the average of each LD measure per bins of physical distance in the genome for each of the clusters.
 ```{r}
 #R
 bin_size <- 1000 # We used a bin size of 1000. Smaller sizes will result in a higher number of measures
 
 # Load the dataset and transform the LD measures for their absolute values
-cl <- read.table('cluster_X.LD.gz', header = True)
+cl <- read.table('cluster_X.LD.gz', header = TRUE)
 cl$R.2 <- abs(cl$R.2)
 cl$D <- abs(cl$D)
 cl$Dprime <- abs(cl$Dprime)
@@ -71,9 +71,11 @@ for(bin in bins){
 # Generate plots
 par(mfrow=c(1,3))
 plot(bins, r2_out, main = 'r^2')
-plot(bins, D_out, main = 'r^2')
-plot(bins, Dprime_out, main = 'r^2')
+plot(bins, D_out, main = 'D')
+plot(bins, Dprime_out, main = 'D prime')
 ```
+![LD](/data/03_Recombination/LD.png)
+
 
 ## Simulating expected LD patterns
 To understand the impact of several population parameters on the LD patterns, we used the Python interface for *FFPopSim*.
