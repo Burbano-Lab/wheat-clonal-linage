@@ -77,7 +77,7 @@ dist_to_PY0925 <- distances[colnames(distances) == 'PY0925', ]
 dist_to_PY0925 <- dist_to_PY0925[! names(d_to_PY0925) %in% c('053i','PY0925','117','37','12.1.037')]
 
 # Load the collection dates and match them with the distances
-dt <- read.table('B71_and_PY0925_clust.dates', header = False)
+dt <- read.table('B71_and_PY0925_clust.dates', header = FALSE)
 dts <- c()
 for(n in names(dist_to_PY0925)){dts <- c(dts, dt[dt[,1] == n, 2])}
 m <- data.frame(Coll_Year = dts, Patr_dist_to_PY0925 = dist_to_PY0925)
@@ -102,7 +102,7 @@ for(i in 1:1000){
 	p <- cor(nmp[,1], nmp[,2])
 	permutations <- c(permutations, p)
 }
-boxplot(cbind(resamplings, permutations), outline = False)
+boxplot(cbind(resamplings, permutations), outline = FALSE)
 ```
 ![Resampling and Permutation](/data/04_Phylogeny/Resampling_Permutation.png)
 

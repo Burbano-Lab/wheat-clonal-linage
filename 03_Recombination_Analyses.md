@@ -140,7 +140,8 @@ plt.xlabel('Distance between loci')
 plt.ylabel('LD')
 plt.show()
 ```
-A dedicated *Python* script can be found in the 'scripts' directory
+![LD simulation example](/data/03_Recombination/LD_simulation_example.png)
+A dedicated *Python* script can be found in the file [LD_simulations.py](/scripts/03_Recombination/LD_simulations.py)
 
 ## Measuring recombination as number of violations of the four-gamete test
 Additionally, we used the presence of four gametes as a proxy for recombination in each of the defined clusters.  
@@ -153,7 +154,6 @@ Inside each loop, a new iteration over isolates of a cluster in a file 'cluster_
 Within each sub-loop, all the variants from each isolate are applied to the reference genome
 and the outputs are pseudo-fasta files per chromosome
 '''
-
 for chr in {1..8}; do
     (while read sample; do
         samtools faidx 70-15.fasta $chr: |
