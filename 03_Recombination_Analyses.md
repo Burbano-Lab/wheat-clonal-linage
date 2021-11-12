@@ -126,7 +126,7 @@ def simul(params):
 #   mu: mutation rate per site per generation
 #   r: Probability of sexual reproduction per generation
 #   cr: Crossover rate per site per generation
-parameters = {'N':1000000, 'L':200, 'mu':0.0003 , 'r':0.0, 'cr':0.01} # Example of set of parameters
+parameters = {'N':100000, 'L':300, 'mu':0.0003 , 'r':0.01, 'cr':0.01} # Example of set of parameters
 
 # Run the simulation
 result = simul(parameters)

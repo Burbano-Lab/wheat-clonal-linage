@@ -28,12 +28,13 @@ plink --allow-extra-chr --vcf B71clust_PY0925clust.snps.filtered.fullinfo.vcf.gz
 
 tped2fasta B71clust_PY0925clust.snps.filtered.fullinfo > B71clust_PY0925clust.snps.filtered.fullinfo.fasta
 ```
-
+Files can be found at: [B71clust_PY0925clust.snps.filtered.fullinfo.tped](/data/04_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.tped) ; [B71clust_PY0925clust.snps.filtered.fullinfo.tfam](/data/04_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.tfam) ; [B71clust_PY0925clust.snps.filtered.fullinfo.fasta](/data/04_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.fasta).  
 Then, we generated a ML phylogeny using RAxML-NG with a GTR+G substituion model and 1,000 bootstrap replicates.
 ```bash
 raxml-ng --all --msa B71clust_PY0925clust.snps.filtered.fullinfo.fasta --msa-format FASTA \
 --data-type DNA --model GTR+G --bs-trees 1000
 ```
+Best tree with bootstrap support values can be found at: [B71clust_PY0925clust.snps.filtered.fullinfo.raxml.support](/data04_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.raxml.support)
 
 ## Removing homoplasy
 As low bootstrap values can be caused due to presence homoplasies, we used *ClonalFrameML* in order to detect and remove those events from the calculated phylogeny.
