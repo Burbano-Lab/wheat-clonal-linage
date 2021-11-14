@@ -1,4 +1,4 @@
-# XX General Title XX
+# A pandemic clonal lineage of the wheat blast fungus
 # 2. Population Structure Analyses
 
 Program                  | Location
@@ -12,14 +12,14 @@ Program                  | Location
 *FFPopSim*               | (https://github.com/neherlab/ffpopsim)
 *R*                      | (https://cran.r-project.org/)
 
-## Alignment of short reads to reference genome
+## Alignment of short reads to the rice-infecting M. oryzae 70-15 reference genome
 
 Raw .fastq sequences were trimmed with *AdapterRemoval2*
 ```bash
 AdapterRemoval --file1 $sample1.R1.fastq.gz --file2 $sample1.R2.fastq.gz --gzip --basename $sample.trimmed
 ```
 
-We used the rice-infecting *Magnaporthe oryzae* 70-15 assembly as the reference genome and used *Bwa-mem2* to create the index.
+We used the rice-infecting *Magnaporthe oryzae* 70-15 assembly as the reference genome and indexed this genome using *Bwa-mem2*.
 ```bash
 bwa index B71.fa
 ```
