@@ -12,7 +12,7 @@ Program                  | Location
 *FFPopSim*               | (https://github.com/neherlab/ffpopsim)
 *R*                      | (https://cran.r-project.org/)
 
-## Alignment of short reads to the rice-infecting M. oryzae 70-15 reference genome
+## Alignment of short reads to the rice-infecting *M. oryzae* 70-15 reference genome
 
 Raw .fastq sequences were trimmed with *AdapterRemoval2*
 ```bash
@@ -24,7 +24,7 @@ We used the rice-infecting *Magnaporthe oryzae* 70-15 assembly as the reference 
 bwa index B71.fa
 ```
 
-*BWA mem2* was used to map the trimmed reads to the reference genome, *samtools* was used to to discard non-mapped reads, and *sambamba* was used to sort and mark PCR optical duplicates.
+*BWA mem2* was used to map the trimmed reads to the reference genome, *samtools* to discard non-mapped reads, and *sambamba* to sort and mark PCR optical duplicates.
 ```bash
 bwa-mem2 mem -R "@RG\tID:$sample\tSM:$sample" 70-15.fa $sample1.trimmed.R1.fastq.gz $sample1.trimmed.R2.fastq.gz > sample1.sam
 samtools view -SbhF 4 > sample1_mapped.bam
@@ -32,26 +32,26 @@ sambamba sort -o sample1_mapped_sorted.bam sample1_mapped.bam
 sambamba markdup sample1_mapped_sorted.bam sample1_mapped_sorted.dd.bam
 ```
 
-## Genotype calling
-We used *HaplotypeCaller* from *GATK* to generate genomic haplotype calls per individual using the duplicate-marked resulting BAM file as input
+## Variant calling
+We used the *HaplotypeCaller* from *GATK* to generate genomic haplotype calls per individual using the duplicate-marked BAM file as input.
 ```bash
 gatk HaplotypeCaller -R 70-15.fa -I sample1_mapped_sorted.dd.bam -O sample1.g.vcf.gz
 ```
 
-We used *CombineGVCFs*, *GenotypeGVCFs* and *SelectVariants* from *GATK* to combine the individual genomic VCFs, call genotypes and filter for SNPs, respectively
+We used *CombineGVCFs*, *GenotypeGVCFs* and *SelectVariants* from *GATK* to combine the individual genomic VCFs, call genotypes and filter SNPs, respectively.
 ```bash
 gatk CombineGVCFs -R 70-15.fa -V sample1.g.vcf.gz -V sample2.g.vcf.gz -V sampleN.g.vcf.gz -O wheat-blast.g.vcf.gz
 gatk GenotypeGVCFs -R 70-15.fa -ploidy 1 -V wheat-blast.g.vcf.gz -O wheat-blast.raw.vcf.gz
 gatk SelectVariants -select-type SNP -V wheat-blast.raw.vcf.gz -O wheat-blast.raw.snps.vcf.gz
 ```
 
-We extracted all Quality by Depth values
+We extracted all Quality-by-Depth (QD) values
 ```bash
 bcfools view -H wheat-blast.raw.snps.vcf.gz | cut -f8 |
 awk -F "QD=" '{print $2}' | cut -f1 -d ";" | gzip >  wheat-blast.raw.snps.QD.gz
 ```
 
-We assesed the distribution of the Quality by Depth, to set a filters of one standard deviation around the median value
+Based on the distribution of Quality-by-Depth values, we set filters of one standard deviation around the median value.
 ```python
 # Python
 import pandas as pd
@@ -62,7 +62,7 @@ upper = med + QD.std()
 print(lower, upper)
 ```
 
-Finally, we filtered accordingly using *GATK VariantFiltration* and created a new VCF keeping non-missing positions using *bcftools*
+Finally, using the above-mentioned scheme, we filtered SNPs using *GATK VariantFiltration* and created a new VCF file, keeping non-missing positions, using *bcftools*.
 ```bash
 gatk VariantFiltration --filter-name "QD" \
 --filter-expression "QD <= $lower || QD >= $upper" \
@@ -73,7 +73,7 @@ bcftools view -g ^miss wheat-blast.snps.filter.vcf.gz | bgzip > wheat-blast.snps
 ```
 
 ## PCA analyses
-We computed pairwise Hamming distances on non-missing SNP positions.
+We computed pairwise Hamming distances on non-missing SNP positions (full information).
 ```bash
 plink --allow-extra-chr --vcf wheat-blast.snps.filtered.vcf.gz --out wheat-blast.snps.filtered
 ```
