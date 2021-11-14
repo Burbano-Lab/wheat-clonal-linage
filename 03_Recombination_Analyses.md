@@ -1,4 +1,4 @@
-# XX General Title XX
+# A pandemic clonal lineage of the wheat blast fungus
 # 3. Recombination Analyses
 
 Program                | Location
@@ -13,8 +13,8 @@ Program                | Location
 *bcftools v.1.11*      | (https://github.com/samtools/bcftools)
 
 
-### Detecting recombination via Linkage Desequilibrium (LD) patterns
-To detect and measure the presence of recombination, we grouped the dataset based on the previously described PCA. We will use *VCFtools* to compute several measures for recombination. However, as *VCFtools* handles diploid organisms, we transformed the haploid *VCF* into "phased double haploid" *VCFs*
+### Inference of recombination via Linkage Desequilibrium (LD) decay patterns
+First, we grouped the isolates in genetic groups based on the previously described PCA-based population structure analyses (e.g. B71 cluster, PY0925 cluster, other Brazilian isolates). For each genetic group we used *VCFtools* to compute several measures of LD. Since *VCFtools* is designed to handle diploid organisms, we transformed the haploid *VCF* files into "phased double haploid" *VCFs*
 ```bash
 # Create a VCF as diplod
 plink --allow-extra-chr --vcf wheat-blast.snps.filtered.vcf.gz --recode vcf \
@@ -36,7 +36,7 @@ vcftools --keep cluster_X.list --gzvcf wheat-blast.snps.filtered.as_dip_phased.v
 gzip > cluster_X.LD.gz
 ```
 Resulting files: [B71 cluster](/data/03_Recombination/B71_cluster.LD.gz) ; [PY0925 cluster](/data/03_Recombination/PY0925_cluster.LD.gz) ; [Brazilian samples](/data/03_Recombination/Brazilian_cluster.thinned.LD.gz).  
-Finally, using *R* we calculated the average of each LD measure per bins of physical distance in the genome for each of the clusters.
+Finally, for each of the genetic clusters,  using *R*, we calculated the average of each LD measure (*r<sup>2</sup>*, Lewontin's *D* and *D'*) in bins of physical genomic distance.
 ```{r}
 #R
 bin_size <- 1000 # We used a bin size of 1000. Smaller sizes will result in a higher number of measures
@@ -77,8 +77,8 @@ plot(bins, Dprime_out, main = 'D prime')
 ![LD](/data/03_Recombination/LD.png)
 
 
-## Simulating expected LD patterns
-To understand the impact of several population parameters on the LD patterns, we used the Python interface for *FFPopSim*.
+## Forward simulations of LD decay patterns
+To understand the impact of the probabability of sexual reproduction per generation and the population size on the patterns of LD decay, we used the Python interface of the forward simulator *FFPopSim*.
 
 ```python
 # python2.7
@@ -143,9 +143,8 @@ plt.show()
 ![LD simulation example](/data/03_Recombination/LD_simulation_example.png)  
 A dedicated *Python* script can be found in the file [LD_simulations.py](/scripts/03_Recombination/LD_simulations.py)
 
-## Measuring recombination as number of violations of the four-gamete test
-Additionally, we used the presence of four gametes as a proxy for recombination in each of the defined clusters.  
-For this purpose, we used *RminCutter*. As this program takes alignments as input, we prepared the data using a combination of *samtools* and *bcftools*.
+## Detection of recombination events using the four-gamete test
+We used the four-gamete test to detect recombination events in each of the defined clusters. For this purpose, we used *RminCutter*. Since this program takes alignments as input, we prepared the data using a combination of *samtools* and *bcftools*.
 
 ```bash
 '''
@@ -164,11 +163,11 @@ for chr in {1..8}; do
 done
 ```
 
-With the formatted pseudo-fasta files, we proceeded to run *RminCutter*
+We used the formatted pseudo-fasta files as input for *RminCutter*
 ```bash
 # The following loop will run RminCutter on a given cluster of samples per chromosome
 for chr in {1..8}; do
     perl RminCutter.pl -g -i $cluster.Chr$chr.fasta
 done
 ```
-The output consists on different fasta files corresponding to regions where no four-gamete test violations are present.
+The output consists of multiple fasta files that correspond to genomic regions without violations of the four-gamete test.
