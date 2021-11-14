@@ -1,4 +1,4 @@
-# XX General Title XX
+# A pandemic clonal lineage of the wheat blast fungus
 # 4. Phylogenetic Analyses
 
 Program                | Location
@@ -11,7 +11,7 @@ Program                | Location
 *BactDating*           | (https://github.com/xavierdidelot/BactDating)
 *R*                    | (https://cran.r-project.org/)
 
-After removing those samples where recombination is present (see [3. Recombination analyses](/03_Recombination_Analyses.md)), we thinned the dataset to the B71 clonal lineag and the PY0925 cluster (also clonal) which can be used as an outgroup. We kept positions with no-missing data.
+To carry out the phylogenetic analysis we only used non-recombining genetic groups (clonal lineages) (see [3. Recombination analyses](/03_Recombination_Analyses.md)). The final dataset included all isolates from the B71 and the PY0925 clonal lineages (the latter was used as outgroup). We only used positions with no-missing data (full information).
 
 ```bash
 bcftools view -a -S B71clust_PY0925clust.list wheat-blast.snps.filtered.vcf.gz |
@@ -20,7 +20,7 @@ bgzip > B71clust_PY0925clust.snps.filtered.fullinfo.vcf.gz
 ```
 
 ## Maximum-Likelihood (ML) phylogeny
-We converted the VCF file into a pseudo-fasta format to have whole-genome concatenated SNPs per isoalte as a suitable input for the phylogenetic analyses.
+We converted the VCF file into a pseudo-fasta format to have whole-genome concatenated SNPs per isolate as a suitable input for the phylogenetic analyses.
 
 ```bash
 plink --allow-extra-chr --vcf B71clust_PY0925clust.snps.filtered.fullinfo.vcf.gz \
@@ -28,40 +28,41 @@ plink --allow-extra-chr --vcf B71clust_PY0925clust.snps.filtered.fullinfo.vcf.gz
 
 tped2fasta B71clust_PY0925clust.snps.filtered.fullinfo > B71clust_PY0925clust.snps.filtered.fullinfo.fasta
 ```
+
 Files can be found at: [B71clust_PY0925clust.snps.filtered.fullinfo.tped](/data/04_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.tped) ; [B71clust_PY0925clust.snps.filtered.fullinfo.tfam](/data/04_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.tfam) ; [B71clust_PY0925clust.snps.filtered.fullinfo.fasta](/data/04_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.fasta).  
+
 Then, we generated a ML phylogeny using RAxML-NG with a GTR+G substituion model and 1,000 bootstrap replicates.
 ```bash
 raxml-ng --all --msa B71clust_PY0925clust.snps.filtered.fullinfo.fasta --msa-format FASTA \
 --data-type DNA --model GTR+G --bs-trees 1000
 ```
-Best tree with bootstrap support values can be found at: [B71clust_PY0925clust.snps.filtered.fullinfo.raxml.support](/data/04_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.raxml.support)
+The best tree (with bootstrap support values) can be found at: [B71clust_PY0925clust.snps.filtered.fullinfo.raxml.support](/data/04_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.raxml.support)
 
-## Removing homoplasy
-As low bootstrap values can be caused due to presence homoplasies, we used *ClonalFrameML* in order to detect and remove those events from the calculated phylogeny.
+## Detection of putative recombination events
+To detect putative recombination events and take those in account for the phylogenetic reconstruction we used *ClonalFrameML*.
 
 ```bash
 ClonalFrameML B71clust_PY0925clust.snps.filtered.fullinfo.fasta.raxml.bestTree B71clust_PY0925clust.snps.filtered.fullinfo.fasta
 ```
 We used the output of *ClonalFrameML* as input for the dating analyses (see Dating the Phylogeny).  
 
-Furthermore, in order to test the effect of removing all targeted regions with homoplasies on the ML phylogenetic reconstruction, we used the output file *_prefix_.importation_status.txt* to remove all the regions from the original concatenated-SNPs alignment. For this purpose we used the custom *Python* scripts *get_list_of_SNPs_with_homoplasy.py* and *clean_fasta.py*
+Furthermore, we tested the effect of removing the genomic regions with recombination events from the ML phylogenetic reconstruction. For this purpose we used the output file *_prefix_.importation_status.txt* to remove all the regions from the original concatenated-SNPs alignment file and the custom *Python* scripts: *get_list_of_SNPs_with_homoplasy.py* and *clean_fasta.py*
 ```bash
 python clean_homoplasy_from_fasta.py B71clust_PY0925clust.snps.filtered.fullinfo.importation_status.txt \
 B71clust_PY0925clust.snps.filtered.fullinfo.fasta > B71clust_PY0925clust.snps.filtered.fullinfo.clean.fasta \
 2> B71clust_PY0925clust.snps.filtered.fullinfo.homoplasy.fasta
 ```
 
-Finally, we used the cleaned fasta alignment and computed again a ML phylogeny with RAxML-NG
+Finally, we used the filtered fasta alignment file and computed again a ML phylogeny with RAxML-NG
 ```bash
 raxml-ng --all --msa B71clust_PY0925clust.snps.filtered.fullinfo.clean.fasta --data-type DNA \
 --model GTR+G --bs-trees 1000
 ```
-Note: Bootstrap values in the main nodes improved
 
-## Dating the phylogeny
+## Phylogenetic dating
 Temporal Signal
 
-We used the homoplasy-free tree generated by *ClonalFrameML* as input [B71clust_PY0925clust.snps.filtered.fullinfo.labelled_tree.newick](/data/04_Phylogeny/B71_and_PY0925_clust.snps.filtered.fullinfo.labelled_tree.newick), using the isoalte collection dates [B71_and_PY0925_clust.dates](/data/04_Phylogeny/B71_and_PY0925_clust.dates).
+We used the recombination-free tree generated by *ClonalFrameML* as input [B71clust_PY0925clust.snps.filtered.fullinfo.labelled_tree.newick](/data/04_Phylogeny/B71_and_PY0925_clust.snps.filtered.fullinfo.labelled_tree.newick). To evaluate the presence of a a temporal signal in the dataset we used the isolate collection dates [B71_and_PY0925_clust.dates](/data/04_Phylogeny/B71_and_PY0925_clust.dates).
 ```{r}
 # R
 library(ape)
@@ -90,7 +91,7 @@ cor.test(m$Coll_Year, m$Patr_dist_to_PY0925)
 ```
 ![Distances vs Dates](/data/04_Phylogeny/Dist_vs_Dates.png)
 
-Later, we tested the robustness of the correlation by recalculating the correlation coefficient of 1,000 sampling with replacement repetitions. Conversely, dates and distances were randomly permutated (1,000 times) and again, the correlation coefficient was calculated.
+We tested the robustness of the correlation signal between root-to-tip distance and collection dates by sampling with replacement and recalculating the correlation coefficient 1,000 times. Additionally, we randomly permutate the collection dates of each isolate and recalculate the correlation coefficient 1,000 times. 
 ```{r}
 set.seed(123)
 resamplings <- c()
@@ -107,7 +108,7 @@ boxplot(cbind(resamplings, permutations), outline = FALSE)
 ```
 ![Resampling and Permutation](/data/04_Phylogeny/Resampling_Permutation.png)
 
-Finally, we used *BactDating* to build a dated phylogeny. We utilized the function *loadCFML* to use the *ClonalFrameML's* output directly as the input.
+Finally, we used *BactDating* to generate a dated phylogeny. We utilized the function *loadCFML*, which permit the direct use the output of *ClonalFrameML's* as input file.
 ```{r}
 # R
 library(BactDating)
