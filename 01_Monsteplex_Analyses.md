@@ -24,7 +24,7 @@ We used the wheat-infecting *Magnaporthe oryzae* B71 assembly as the reference g
 bwa index B71.fa
 ```
 
-*BWA mem* was used to map the trimmed reads to the reference genome and *samtools* to discard non-mapped reads, sort and convert the mapped file into a binary format (BAM).
+*BWA mem* was used to map the trimmed reads to the reference genome, and *samtools* to discard non-mapped reads, sort and convert the mapped file into a binary format (BAM).
 ```bash
 bwa mem B71.fa $sample1.trimmed.R1.fastq.gz $sample1.trimmed.R1.fastq.gz > sample1_mapped.sam
 samtools view -F 4 -Sbh sample1_mapped.sam | samtools sort - > sample1_mapped.bam
