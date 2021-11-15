@@ -1,5 +1,6 @@
 # The input file is the ClonalFrameML output '_importation_status.txt' (better if NODE* rows are removed) and the original .fasta alignment.
 # The output is splitted: 1) STDOUT: Cleaned fasta alignment 2) STDERR: fasta alignment with homoplasies
+# Moreover, the files start with a header '#' indicating the relative position of the kept / removed SNPs
 # USAGE: python3 clean_homoplasy_from_fasta.py <file.importation_status.txt> <original.fasta> > cleaned.fasta 2> homoplasies.fasta
 
 import pandas as pd
@@ -19,6 +20,11 @@ for row in range(m.shape[0]):
     remove = k
 total = set(range(1,l+1))
 keep = total.difference(remove)
+
+print('# SNPs_without_homoplasy')
+print('# ' + ' '.join([str(i) for i in keep]))
+print('# SNPs_with_homoplasy', file = stderr)
+print('# ' + ' '.join([str(i) for i in remove]), file = stderr)
 
 with open(fasta, 'r') as f:
     for line in f:

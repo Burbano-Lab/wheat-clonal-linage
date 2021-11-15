@@ -35,7 +35,7 @@ vcftools --keep cluster_X.list --gzvcf wheat-blast.snps.filtered.as_dip_phased.v
 --max-alleles 2 --min-alleles 2 --min-r2 0.1 --hap-r2 --phased --stdout |
 gzip > cluster_X.LD.gz
 ```
-Resulting files: [B71 cluster](/data/03_Recombination/B71_cluster.LD.gz) ; [PY0925 cluster](/data/03_Recombination/PY0925_cluster.LD.gz) ; [Brazilian samples](/data/03_Recombination/Brazilian_cluster.thinned.LD.gz).  
+Resulting files: [B71 cluster](/data/04_Recombination/B71_cluster.LD.gz) ; [PY0925 cluster](/data/04_Recombination/PY0925_cluster.LD.gz) ; [Brazilian samples](/data/04_Recombination/Brazilian_cluster.thinned.LD.gz).  
 Finally, for each of the genetic clusters,  using *R*, we calculated the average of each LD measure (*r<sup>2</sup>*, Lewontin's *D* and *D'*) in bins of physical genomic distance.
 ```{r}
 #R
@@ -74,7 +74,7 @@ plot(bins, r2_out, main = 'r^2')
 plot(bins, D_out, main = 'D')
 plot(bins, Dprime_out, main = 'D prime')
 ```
-![LD](/data/03_Recombination/LD.png)
+![LD](/data/04_Recombination/LD.png)
 
 
 ## Forward simulations of LD decay patterns
@@ -140,8 +140,8 @@ plt.xlabel('Distance between loci')
 plt.ylabel('LD')
 plt.show()
 ```
-![LD simulation example](/data/03_Recombination/LD_simulation_example.png)  
-A dedicated *Python* script can be found in the file [LD_simulations.py](/scripts/03_Recombination/LD_simulations.py)
+![LD simulation example](/data/04_Recombination/LD_simulation_example.png)  
+A dedicated *Python* script can be found in the file [LD_simulations.py](/scripts/04_Recombination/LD_simulations.py)
 
 ## Detection of recombination events using the four-gamete test
 We used the four-gamete test to detect recombination events in each of the defined clusters. For this purpose, we used *RminCutter*. Since this program takes alignments as input, we prepared the data using a combination of *samtools* and *bcftools*.
