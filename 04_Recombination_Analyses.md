@@ -1,5 +1,5 @@
 # A pandemic clonal lineage of the wheat blast fungus
-# 3. Recombination Analyses
+# 4. Recombination Analyses
 
 Program                | Location
 ---------------------- | -----------
