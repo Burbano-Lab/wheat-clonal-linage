@@ -125,7 +125,7 @@ rslt = bactdate(rooted, dts, nbIts = 1000000, thin = 1000, updateRoot = F, showP
 ```
 
 ## Phylogenetic Dating using BEAST 2
-We used the output file information provided by [*ClonalFrameML*](/data/05_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.importation_status_NODEs_removed.txt) to mask putative recombining SNPs and labelled as missing information "?" using the custom Python scipt *mask_positions.py*[/scripts/05_Phylogeny/mask_positions.py] on the genome-wide SNPs alignment [fasta file](/data/05_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.fasta)
+We used the output file information provided by [*ClonalFrameML*](/data/05_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.importation_status_NODEs_removed.txt) to mask putative recombining SNPs and labelled as missing information "?" using the custom Python script [*mask_positions.py*](/scripts/05_Phylogeny/mask_positions.py) on the genome-wide SNPs alignment [fasta file](/data/05_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.fasta)
 
 ```bash
 python mask_positions.py B71clust_PY0925clust.snps.filtered.fullinfo.fasta B71clust_PY0925clust.snps.filtered.fullinfo.importation_status_NODEs_removed.txt > B71_and_PY0925_clust.snps.filtered.fullinfo.recomb_masked.fasta
@@ -143,7 +143,7 @@ The resulting [masked fasta file](/data/05_Phylogeny/B71_and_PY0925_clust.snps.f
 - Log every: 1,000
 - Accounting for invariant sites by manually including the tag `constantSiteWeights='9117544 9766162 9779548 9135832'` after the `<data>` block
 
-The resulting [XML configuration file](/data/05_Phylogeny/B71_and_PY0925_clust.recomb_masked.BEAST2.xml) was submitted to the [CIPRES Science Gateway](https://www.phylo.org/) with the following command:
+The resulting [XML configuration file](/data/05_Phylogeny/B71_and_PY0925_clust.recomb_masked.BEAST2.xml) was submitted to the [CIPRES Science Gateway](https://www.phylo.org/) with the following command to compute a Bayesian tip-dated phylogenetic reconstruction:
 ```bash
 beast -threads 3 -instances 3 -beagle_SSE -beagle_scaling dynamic infile.xml
 ```
