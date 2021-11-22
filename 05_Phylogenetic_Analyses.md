@@ -8,10 +8,10 @@ Program                         | Location
 *tped2fasta*                    | (https://github.com/smlatorreo/misc_tools)
 *RAxML-NG v.1.0.3*              | (https://github.com/amkozlov/raxml-ng)
 *ClonalFrameML v.1.12*          | (https://github.com/xavierdidelot/clonalframeml)
-*clean_homoplasy_from_fasta.py* | (/scripts/05_Phylogeny/clean_homoplasy_from_fasta.py)
+*clean_homoplasy_from_fasta.py* | [This repository](/scripts/05_Phylogeny/clean_homoplasy_from_fasta.py)
 *BactDating*                    | (https://github.com/xavierdidelot/BactDating)
 *R*                             | (https://cran.r-project.org/)
-*mask_positions.py*             | (/scripts/05_Phylogeny/mask_positions.py)
+*mask_positions.py*             | [This repository](/scripts/05_Phylogeny/mask_positions.py)
 *BEAST2*                        | (http://www.beast2.org/)
 
 To carry out the phylogenetic analysis we only used non-recombining genetic groups (clonal lineages) (see [3. Recombination analyses](/04_Recombination_Analyses.md)). The final dataset included all isolates from the B71 and the PY0925 clonal lineages (the latter was used as outgroup). We only used positions with no-missing data (full information).
@@ -125,4 +125,27 @@ rslt = bactdate(rooted, dts, nbIts = 1000000, thin = 1000, updateRoot = F, showP
 ```
 
 ## Phylogenetic Dating using BEAST 2
-We used the information provided by [*ClonalFrameML*](#detection-of-putative-recombination-events)
+We used the output file information provided by [*ClonalFrameML*](/data/05_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.importation_status_NODEs_removed.txt) to mask putative recombining SNPs and labelled as missing information "?" using the custom Python scipt *mask_positions.py*[/scripts/05_Phylogeny/mask_positions.py] on the genome-wide SNPs alignment [fasta file](/data/05_Phylogeny/B71clust_PY0925clust.snps.filtered.fullinfo.fasta)
+
+```bash
+python mask_positions.py B71clust_PY0925clust.snps.filtered.fullinfo.fasta B71clust_PY0925clust.snps.filtered.fullinfo.importation_status_NODEs_removed.txt > B71_and_PY0925_clust.snps.filtered.fullinfo.recomb_masked.fasta
+```
+
+The resulting [masked fasta file](/data/05_Phylogeny/B71_and_PY0925_clust.snps.filtered.fullinfo.recomb_masked.fasta) was used as input to create the configuration file with *beauti (BEAST 2)* using the following parameters and options:
+
+- Tips were calibrated with the [collection dates](/data/05_Phylogeny/B71_and_PY0925_clust.dates)
+- HKY substitution model
+- Strict Clock rate
+- Uniform prior for the clock rate: [1E-10 to 1E-3] with a starting value of 1E-5
+- Tree prior: Coalescent Extended Bayesian Skyline
+- Monophyletic prior for the different clusters: Zambian isolates; Bangaladeshi isolates ; B71 cluster ; PY0925 cluster
+- Chain length: 20'000,000
+- Log every: 1,000
+- Accounting for invariant sites by manually including the tag `constantSiteWeights='9117544 9766162 9779548 9135832'` after the `<data>` block
+
+The resulting [XML configuration file](/data/05_Phylogeny/B71_and_PY0925_clust.recomb_masked.BEAST2.xml) was submitted to the [CIPRES Science Gateway](https://www.phylo.org/) with the following command:
+```bash
+beast -threads 3 -instances 3 -beagle_SSE -beagle_scaling dynamic infile.xml
+```
+
+After four independent chains were computed, we used *LogCombiner* and *TreeAnotator* from *BEAST 2* to combine the chains and calculate a [Maximum Credibility Tree](/data05_Phylogeny/B71_and_PY0925_clust.recomb_masked.COMBINED.MC.tree), respectively.
