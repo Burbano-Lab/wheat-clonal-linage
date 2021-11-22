@@ -148,4 +148,4 @@ The resulting [XML configuration file](/data/05_Phylogeny/B71_and_PY0925_clust.r
 beast -threads 3 -instances 3 -beagle_SSE -beagle_scaling dynamic infile.xml
 ```
 
-After four independent chains were computed, we used *LogCombiner* and *TreeAnotator* from *BEAST 2* to combine the chains and calculate a [Maximum Credibility Tree](/data05_Phylogeny/B71_and_PY0925_clust.recomb_masked.COMBINED.MC.tree), respectively.
+After four independent chains were computed, we used *LogCombiner* and *TreeAnotator* from *BEAST 2* to combine the chains and calculate a [Maximum Credibility Tree](/data/05_Phylogeny/B71_and_PY0925_clust.recomb_masked.COMBINED.MC.tree), respectively.
