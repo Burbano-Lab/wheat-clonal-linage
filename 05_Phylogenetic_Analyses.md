@@ -125,4 +125,4 @@ rslt = bactdate(rooted, dts, nbIts = 1000000, thin = 1000, updateRoot = F, showP
 ```
 
 ## Phylogenetic Dating using BEAST 2
-We used the information provided by *ClonalFrameML* (#detection-of-putative-recombination-events)
+We used the information provided by [*ClonalFrameML*](#detection-of-putative-recombination-events)
