@@ -30,6 +30,18 @@ sambamba sort -o sample1_mapped_sorted.bam sample1_mapped.bam
 sambamba markdup sample1_mapped_sorted.bam sample1_mapped_sorted.dd.bam
 ```
 
+Depth and coverage statistics were computed using samtools depth
+```bash
+# Average depth
+samtools depth sample1_mapped_sorted.dd.bam | awk '{sum += $3}END{print sum / NR}'
+
+# Percentage of genome covered. 70-15 genome reference length = 41027733
+samtools depth sample1_mapped_sorted.dd.bam | awk '{NR / 41027733}'
+
+```
+A summary of these statistics was organized in a [table](/data/02_Preprocessing_and_Variant_Calling/coverage_summary.tsv)
+
+
 ## Variant calling
 We used the *HaplotypeCaller* from *GATK* to generate genomic haplotype calls per individual using the duplicate-marked BAM file as input.
 ```bash
