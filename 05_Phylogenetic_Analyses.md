@@ -14,7 +14,7 @@ Program                         | Location
 *mask_positions.py*             | [This repository](/scripts/05_Phylogeny/mask_positions.py)
 *BEAST2*                        | (http://www.beast2.org/)
 
-To carry out the phylogenetic analysis we only used non-recombining genetic groups (clonal lineages) (see [3. Recombination analyses](/04_Recombination_Analyses.md)). The final dataset included all isolates from the B71 and the PY0925 clonal lineages (the latter was used as outgroup). We only used positions with no-missing data (full information).
+To carry out the phylogenetic analysis we only used non-recombining genetic groups (clonal lineages) (see [4. Recombination analyses](/04_Recombination_Analyses.md)). The final dataset included all isolates from the B71 and the PY0925 clonal lineages (the latter was used as outgroup). We only used positions with no-missing data (full information).
 
 ```bash
 bcftools view -a -S B71clust_PY0925clust.list wheat-blast.snps.filtered.vcf.gz |
@@ -47,6 +47,7 @@ To detect putative recombination events and take those in account for the phylog
 ```bash
 ClonalFrameML B71clust_PY0925clust.snps.filtered.fullinfo.fasta.raxml.bestTree B71clust_PY0925clust.snps.filtered.fullinfo.fasta
 ```
+Important summary statistics produced by *ClonalFrameML* can be found at [this table](B71_and_PY0925_clust.snps.filtered.fullinfo.em.txt).  
 We used the output of *ClonalFrameML* as input for the dating analyses (see Dating the Phylogeny).  
 
 Furthermore, we tested the effect of removing the genomic regions with recombination events from the ML phylogenetic reconstruction. For this purpose we used the output file *_prefix_.importation_status.txt* to remove all the regions from the original concatenated-SNPs alignment file and the custom *Python* script *clean_homoplasy_from_fasta.py*(/scripts/05_Phylogeny/clean_homoplasy_from_fasta.py)
