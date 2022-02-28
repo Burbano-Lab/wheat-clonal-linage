@@ -1,5 +1,5 @@
 # A pandemic clonal lineage of the wheat blast fungus
-Supporting computational methods, pipelines, data and script for the manuscript "XX"
+Supporting computational methods, pipelines, data and script for the manuscript "XX"  
 DOI: XX.XX.XX
 
 * [01. Monsterplex Analyses](/01_Monsteplex_Analyses.md)
