@@ -9,8 +9,8 @@ Program                                  | Location
 *BWA v.0.7.12*                           | (https://github.com/lh3/bwa)
 *samtools v.1.11*                        | (https://github.com/samtools/samtools)
 *blast+ v.2.12*                          | (https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)
-*extract_positions_from_blast_result.py* | (./scripts/01_Monsterplex_84SNPs_analyses/extract_positions_from_blast_result.py)
-*extract_genotypes_from_BAM.sh*          | (./scripts/01_Monsterplex_84SNPs_analyses/extract_genotypes_from_BAM.sh)
+*extract_positions_from_blast_result.py* | (/scripts/01_Monsterplex_84SNPs_analyses/extract_positions_from_blast_result.py)
+*extract_genotypes_from_BAM.sh*          | (/scripts/01_Monsterplex_84SNPs_analyses/extract_genotypes_from_BAM.sh)
 
 ## Alignment of short reads to the *M. oryzae* B71 reference genome
 
@@ -39,7 +39,7 @@ First, we indexed the B71 reference genome with *makeblastdb*
 makeblastdb -dbtype nucl -in B71.fa -out B71
 
 ```
-We then used *blastn* to align the [regions around the diagnostic SNPs]([./data/01_Monsterplex_84SNPs_analyses/Diagnostic_SNPs_regions.fasta) to the B71 reference genome
+We then used *blastn* to align the [regions around the diagnostic SNPs]([/data/01_Monsterplex_84SNPs_analyses/Diagnostic_SNPs_regions.fasta) to the B71 reference genome
 ```bash
 blastn -db B71 -query Diagnostic_SNPs_regions.fasta -outfmt 6 > diagnostic_SNPs_regions_against_B71.out
 ```
@@ -53,7 +53,11 @@ Finally, we extracted the genotypes for each of the per isolate mapped BAM files
 ```bash
 bash extract_genotypes_from_BAM.sh sample1_mapped.bam B71.fa positions_diagnostic_SNPs.out
 ```
-The output format is a fasta-like file that can be used for subsequent phylogenetic analyses
+The output format is a [fasta-like file](/data/01_Monsterplex_84SNPs_analyses/all.maxmiss0.05.fasta) that can be used for subsequent phylogenetic analyses.
 
 ## Phylogenetic placement of wheat-infecting isolates
-We generated a Neighbor-Joining tree of 532 worldwide distributed *M. oryzae* isolates based on the 84 concatenated SNPs.
+We generated a [Neighbor-Joining](/data/01_Monsterplex_84SNPs_analyses/NJ_all.maxmiss0.05_Bootstrap1K.nexus) tree of 532 worldwide distributed *M. oryzae* isolates based on the 84 concatenated SNPs.
+
+---
+------------------------- | -------------------------------------------------------------------------------------------------
+[Main README](/README.md) | [Next - 02. Preprocessing and Variant Calling Analyses](/02_Preprocessing_and_Variant_Calling.md)

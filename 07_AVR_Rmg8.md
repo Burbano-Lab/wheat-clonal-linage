@@ -14,3 +14,6 @@ muscle -in M_oryzae_AVR-Rmg8_blastresults_curated.fna -out M_oryzae_AVR-Rmg8_bla
 ```
 
 
+---
+------------------------- | ---------------------------------------------------------
+[Main README](/README.md) | [Previous - 06. Mating Type Analyses](/06_Mating_Type.md)
