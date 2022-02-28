@@ -13,7 +13,5 @@ We created the multi-fasta file [M_oryzae_AVR-Rmg8_blastresults_curated.fna](/da
 muscle -in M_oryzae_AVR-Rmg8_blastresults_curated.fna -out M_oryzae_AVR-Rmg8_blastresults_curated.aligned.fasta
 ```
 
-
 ---
-------------------------- | ---------------------------------------------------------
 [Main README](/README.md) | [Previous - 06. Mating Type Analyses](/06_Mating_Type.md)

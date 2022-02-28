@@ -171,6 +171,6 @@ for chr in {1..8}; do
 done
 ```
 The output consists of multiple fasta files that correspond to genomic regions without violations of the four-gamete test.
+
 ---
-------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------
 [Main README](/README.md) | [Previous - 03. Population Structure Analyses](/03_Population_Structure.md) | [Next - 05. Phylogenetic Analyses](/05_Phylogenetic_Analyses.md)

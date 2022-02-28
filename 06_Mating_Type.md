@@ -33,6 +33,6 @@ awk '{if($3 > 0){sum += 1}}END{print (sum / 1330)*100}' # Filter positions cover
 
 ```
 A [summary of the computed breadth of coverage for MAT1-1-1 and MAT1-2-1](/data/06_Mating_Type/breadth_coverage_MAT.txt) allowed to classify the mating type per isolate
+
 ---
-------------------------- | -------------------------------------------------------------------- | ----------------------------------------------
 [Main README](/README.md) | [Previous - 05. Phylogenetic Analyses](/05_Phylogenetic_Analyses.md) | [Next - 07. AVR Rmg8 Analyses](/07_AVR_Rmg8.md)

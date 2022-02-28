@@ -21,6 +21,6 @@ npca <- prcomp(m, scale. = TRUE)
 plot(npca$x[,1], npca$x[,2], xlab = 'PC1', ylab = 'PC2')
 ```
 ![Wheat blast PCA](/data/03_Population_Structure/Wheat_blast_PCA.png)
+
 ---
-------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------
 [Main README](/README.md) | [Previous - 02. Preprocessing and Variant Calling Analyses](/02_Preprocessing_and_Variant_Calling.md) | [Next - 04. Recombination Analyses](/04_Recombination_Analyses.md)

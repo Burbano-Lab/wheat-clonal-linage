@@ -59,5 +59,4 @@ The output format is a [fasta-like file](/data/01_Monsterplex_84SNPs_analyses/al
 We generated a [Neighbor-Joining](/data/01_Monsterplex_84SNPs_analyses/NJ_all.maxmiss0.05_Bootstrap1K.nexus) tree of 532 worldwide distributed *M. oryzae* isolates based on the 84 concatenated SNPs.
 
 ---
-------------------------- | -------------------------------------------------------------------------------------------------
 [Main README](/README.md) | [Next - 02. Preprocessing and Variant Calling Analyses](/02_Preprocessing_and_Variant_Calling.md)
