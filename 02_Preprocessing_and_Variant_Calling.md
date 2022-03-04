@@ -8,9 +8,9 @@ Program                  | Location
 *samtools v.1.11*        | (https://github.com/samtools/samtools)
 *sambamba v0.8.0*        | (https://github.com/biod/sambamba)
 *GATK v4.2*              | (https://github.com/broadinstitute/gatk/releases)
-*PLINK v.1.9*            | (https://www.cog-genomics.org/plink)
+*bcftools v.1.11*        | (https://github.com/samtools/bcftools)
 
-## Alignment of short reads to the rice-infecting *M. oryzae* 70-15 reference genome
+## Alignment of short reads to the rice-infecting *M. oryzae* reference genome
 
 Raw .fastq sequences were trimmed with *AdapterRemoval2*
 ```bash
@@ -19,7 +19,7 @@ AdapterRemoval --file1 $sample1.R1.fastq.gz --file2 $sample1.R2.fastq.gz --gzip 
 
 We used the rice-infecting *Magnaporthe oryzae* 70-15 assembly as the reference genome and indexed this genome using *Bwa-mem2*.
 ```bash
-bwa index B71.fa
+bwa index 70-15.fa
 ```
 
 *BWA mem2* was used to map the trimmed reads to the reference genome, *samtools* to discard non-mapped reads, and *sambamba* to sort and mark PCR optical duplicates.
@@ -57,7 +57,7 @@ gatk SelectVariants -select-type SNP -V wheat-blast.raw.vcf.gz -O wheat-blast.ra
 
 We extracted all Quality-by-Depth (QD) values
 ```bash
-bcfools view -H wheat-blast.raw.snps.vcf.gz | cut -f8 |
+bcftools view -H wheat-blast.raw.snps.vcf.gz | cut -f8 |
 awk -F "QD=" '{print $2}' | cut -f1 -d ";" | gzip >  wheat-blast.raw.snps.QD.gz
 ```
 

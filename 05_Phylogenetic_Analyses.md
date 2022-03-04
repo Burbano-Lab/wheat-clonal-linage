@@ -47,7 +47,7 @@ To detect putative recombination events and take those in account for the phylog
 ```bash
 ClonalFrameML B71clust_PY0925clust.snps.filtered.fullinfo.fasta.raxml.bestTree B71clust_PY0925clust.snps.filtered.fullinfo.fasta
 ```
-Important summary statistics produced by *ClonalFrameML* can be found at [this table](B71_and_PY0925_clust.snps.filtered.fullinfo.em.txt).  
+Important summary statistics produced by *ClonalFrameML* can be found at [this table](/data/05_Phylogeny/B71_and_PY0925_clust.snps.filtered.fullinfo.em.txt).  
 We used the output of *ClonalFrameML* as input for the dating analyses (see Dating the Phylogeny).  
 
 Furthermore, we tested the effect of removing the genomic regions with recombination events from the ML phylogenetic reconstruction. For this purpose we used the output file *_prefix_.importation_status.txt* to remove all the regions from the original concatenated-SNPs alignment file and the custom *Python* script *clean_homoplasy_from_fasta.py*(/scripts/05_Phylogeny/clean_homoplasy_from_fasta.py)

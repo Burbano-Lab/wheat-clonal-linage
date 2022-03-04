@@ -33,7 +33,7 @@ samtools index sample1_mapped.bam
 
 ## Identification of the genomic location of the 84 diagnostic SNPs in the *M. oryzae* B71 reference genome
 
-We used *blastn* to align the the 84 SNPs and their sorrounding regions to the B71 reference genome and subsequently identify the exact genomic coordinates of all 84 SNPs.
+We used *blastn* to align the the 84 SNPs and their surrounding regions to the B71 reference genome and subsequently identify the exact genomic coordinates of all 84 SNPs.
 First, we indexed the B71 reference genome with *makeblastdb*
 ```bash
 makeblastdb -dbtype nucl -in B71.fa -out B71
@@ -43,7 +43,7 @@ We then used *blastn* to align the [regions around the diagnostic SNPs]([/data/0
 ```bash
 blastn -db B71 -query Diagnostic_SNPs_regions.fasta -outfmt 6 > diagnostic_SNPs_regions_against_B71.out
 ```
-We used the python custom script *extract_positions_from_blast_result.py* to extract the genomic coordintes of the B71 reference genome corresponding to each diagnostic SNP
+We used the python custom script *extract_positions_from_blast_result.py* to extract the genomic coordinates of the B71 reference genome corresponding to each diagnostic SNP
 ```bash
 python3 extract_positions_from_blast_result.py diagnostic_SNPs_regions_against_B71.out B71.fa > positions_diagnostic_SNPs.out
 ```

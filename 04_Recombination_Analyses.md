@@ -89,7 +89,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import itertools
 
-# Main function that accepts as input a python directory with the different parameters
+# Main function that accepts as input a python dictionary with the different parameters
 def simul(params):
     L = params['L']
     N = params['N']
@@ -112,7 +112,7 @@ def simul(params):
         LDs.append([diff, abs(pop.get_LD(l1, l2))])
     LDs = np.array(LDs)
 
-    # Compute median values per distace bin
+    # Compute median values per distance bin
     out = []
     for i in range(1,int(max(LDs[:,0]))+1):
         med = np.median(LDs[LDs[:,0] == i, 1])
@@ -141,7 +141,7 @@ plt.ylabel('LD')
 plt.show()
 ```
 ![LD simulation example](/data/04_Recombination/LD_simulation_example.png)  
-A dedicated *Python* script can be found in the file [LD_simulations.py](/scripts/04_Recombination/LD_simulations.py)
+A dedicated *Python* script which can be directly downloaded can be found in the file [LD_simulations.py](/scripts/04_Recombination/LD_simulations.py)
 
 ## Detection of recombination events using the four-gamete test
 We used the four-gamete test to detect recombination events in each of the defined clusters. For this purpose, we used *RminCutter*. Since this program takes alignments as input, we prepared the data using a combination of *samtools* and *bcftools*.
