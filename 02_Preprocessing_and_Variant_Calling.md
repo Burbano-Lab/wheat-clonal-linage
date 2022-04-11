@@ -82,5 +82,7 @@ gatk VariantFiltration --filter-name "QD" \
 bcftools view -g ^miss wheat-blast.snps.filter.vcf.gz | bgzip > wheat-blast.snps.filtered.vcf.gz
 ```
 
+The filtered [VCF file can be found here](/data/02_Preprocessing_and_Variant_Calling/wheat.snps.filtered.vcf.gz)
+
 ---
 [Main README](/README.md) | [Previous - 01. Monsterplex Analyses](/01_Monsteplex_Analyses.md) | [Next - 03. Population Structure Analyses](/03_Population_Structure.md)
