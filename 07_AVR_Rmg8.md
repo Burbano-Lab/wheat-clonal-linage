@@ -6,7 +6,7 @@ Program              | Location
 *MUSCLE v.3.5.1551*  | (https://github.com/rcedgar/muscle)
 
 
-We created the multi-fasta file [M_oryzae_AVR-Rmg8_blastresults_curated.fna](/data/07_AVR_Rmg8/M_oryzae_AVR-Rmg8_blastresults_curated.fna) containing animoacid sequences of the AVR Rmg8 protein in various isolates. Then, we used *MUSCLE* to perform a multiple sequence alignment.
+We created the [multi-fasta file](/data/07_AVR_Rmg8/M_oryzae_AVR-Rmg8_blastresults_curated.fna) containing animoacid sequences of the AVR Rmg8 protein in various isolates. Then, we used *MUSCLE* to perform a multiple sequence alignment.
 
 ```bash
 muscle -in M_oryzae_AVR-Rmg8_blastresults_curated.fna -out M_oryzae_AVR-Rmg8_blastresults_curated.aligned.fasta
