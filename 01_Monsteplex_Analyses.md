@@ -58,5 +58,60 @@ The output format is a [fasta-like file](/data/01_Monsterplex_84SNPs_analyses/al
 ## Phylogenetic placement of wheat-infecting isolates
 We generated a [Neighbor-Joining](/data/01_Monsterplex_84SNPs_analyses/NJ_all.maxmiss0.05_Bootstrap1K.nexus) tree of 532 worldwide distributed *M. oryzae* isolates based on the 84 concatenated SNPs.
 
+## Benchmark of the 84 set of SNPs
+To show that the set of 84 SNPs are informative, we subset the common isolates for which there is whole genomic data available. We computed a [WGS-based Neighbor-Joining tree](/data/01_Monsterplex_84SNPs_analyses/WGS_Benchmark_tree.newick) and [a pruned tree from the 84 SNPs based tree with the common isolates](/data/01_Monsterplex_84SNPs_analyses/84SNPs_Benchmark_tree.newick).
+
+We further calculated genetic (Hamming) distances between each pair of blast isolates using the set of [84 SNPs](/data/01_Monsterplex_84SNPs_analyses/Hamming_Distances_Benchmark_84SNPs.tsv), and the [genome-wide SNPs](/data/01_Monsterplex_84SNPs_analyses/Hamming_Distances_Benchmark_WGS.tsv)
+
+```R
+# R
+
+# Load the pairwise matrix
+SNPsdist <- read.table('Hamming_Distances_Benchmark_84SNPs.tsv', row.names = 1, header = T)
+WGSdist <- read.table('Hamming_Distances_Benchmark_WGS.tsv', row.names = 1, header = T)
+
+# Normalize Hamming Distances
+SNPsdist <- SNPsdist / max(SNPsdist)
+WGSdist <- WGSdist / max(WGSdist)
+
+# Subset the upper triangles
+SNPsvals <- SNPsdist[upper.tri(SNPsdist)]
+WGSsvals <- WGSdist[upper.tri(WGSdist)]
+
+# Produce plot and compute correlation
+plot(SNPsvals, WGSsvals, xlab = 'Monsterplex SNP dataset', ylab = 'WGS SNP dataset', main = 'Pairwise Hamming Distances')
+reg <- lm(WGSsvals ~ SNPsvals)
+abline(reg, lty = 2)
+corrcoef <- cor.test(SNPsvals, WGSsvals, method = 'spe')
+mtext(paste("Spearman's p = ", round(corrcoef$estimate, 2), '\tpval = ', corrcoef$p.value, sep = ''), 3, at = 0.2)
+```
+![WGS_Vs_Monsterplex](/data/01_Monsterplex_84SNPs_analyses/WGS_Vs_Monsterplex.png)
+
+Finally, we created a random sampled distribution and compared with a permuted distribution to assess the robustness of the previous estimation
+```R
+# R
+
+set.seed(12345)
+corrcoef <- c()
+corrcoefpermut <- c()
+for(i in 1:100){
+  # Random subsample
+  subs <- sample(length(SNPsvals), length(SNPsvals)*0.1)
+  SNPsubset <- SNPsvals[subs]
+  WGSsubset <- WGSsvals[subs]
+  r2 <- cor(SNPsubset, WGSsubset, method = 'spe')
+  corrcoef <- c(corrcoef, r2)
+  
+  # Permutation
+  SNPsubsetPermut <- sample(SNPsubset, length(SNPsubset))
+  r2 <- cor(SNPsubsetPermut, WGSsubset, method = 'spe')
+  corrcoefpermut <- c(corrcoefpermut, r2)
+}
+
+# Plot
+boxplot(list(corrcoef, corrcoefpermut), names = c('Subsampling','Permutation'), ylab = "Spearman's p")
+```
+![Subsampling_and_Permutation](/data/01_Monsterplex_84SNPs_analyses/WGS_Vs_Monsterplex_Subsampling_and_Permutation.png)
+
 ---
 [Main README](/README.md) | [Next - 02. Preprocessing and Variant Calling Analyses](/02_Preprocessing_and_Variant_Calling.md)
