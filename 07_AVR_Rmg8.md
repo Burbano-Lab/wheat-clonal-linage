@@ -12,5 +12,7 @@ We created the multi-fasta file [M_oryzae_AVR-Rmg8_blastresults_curated.fna](/da
 muscle -in M_oryzae_AVR-Rmg8_blastresults_curated.fna -out M_oryzae_AVR-Rmg8_blastresults_curated.aligned.fasta
 ```
 
+Here we present the [lesion measurements](/data/07_AVR_Rmg8/Infection_Experiment.tsv) for the infection analyses showed in Fig3B
+
 ---
 [Main README](/README.md) | [Previous - 06. Mating Type Analyses](/06_Mating_Type.md)
