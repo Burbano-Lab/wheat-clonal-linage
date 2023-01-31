@@ -149,7 +149,10 @@ The resulting [XML configuration file](/data/05_Phylogeny/B71_and_PY0925_clust.r
 beast -threads 3 -instances 3 -beagle_SSE -beagle_scaling dynamic infile.xml
 ```
 
-After four independent chains were computed, we used *LogCombiner* and *TreeAnotator* from *BEAST 2* to combine the chains and calculate a [Maximum Credibility Tree](/data/05_Phylogeny/B71_and_PY0925_clust.recomb_masked.COMBINED.MC.tree), respectively.
+After four independent chains were computed, we used *LogCombiner* and *TreeAnotator* from *BEAST 2* to combine the chains and calculate a [Maximum Credibility Tree](/data/05_Phylogeny/B71_and_PY0925_clust.recomb_masked.COMBINED.MC.tree), respectively.  
+
+
+To test the robustness of our evolutionary rate estimation to changes in substitution and clock models, we repeated the analysis using GTR in combination with a strict clock model, and HYK in combination with a random local clock model. The BEAST2 XML configuration files can be found here: [GTR - with strict clock](/data/05_Phylogeny/B71_and_PY0925_clust.recomb_masked.BEAST2.GTR_StrictClock.xml) and [HYK - with Random Local Clock](/data/05_Phylogeny/B71_and_PY0925_clust.recomb_masked.BEAST2.HYK_RandomLocalClock.xml)
 
 ---
 [Main README](/README.md) | [Previous - 04. Recombination Analyses](/04_Recombination_Analyses.md) | [Next - 06. Mating Type Analyses](/06_Mating_Type.md)
